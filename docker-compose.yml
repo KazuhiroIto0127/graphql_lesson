@@ -1,0 +1,34 @@
+version: "3.9"
+
+services:
+  graphql-server:
+    build:
+      context: graphql-server
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    volumes:
+      - type: bind
+        source: ./graphql-server
+        target: /usr/src/app
+    links:
+      - react-client
+    networks:
+      - graphql_network
+    hostname: graphql-server
+
+  react-client:
+    build:
+      context: react-graphql-client
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - type: bind
+        source: ./react-graphql-client/my-app
+        target: /usr/src/app
+    networks:
+      - graphql_network
+    hostname: react-client
+networks:
+  graphql_network:
